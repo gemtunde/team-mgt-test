@@ -19,7 +19,7 @@ import {
 import { TeamForm } from "@/components/forms/TeamForm";
 import { TeamFormData } from "@/lib/validations/team";
 import { useTeamsStore } from "@/store/team";
-import { X, Loader2 } from "lucide-react";
+import { X, Loader2, Check } from "lucide-react";
 import Image from "next/image";
 
 export function TeamDrawers() {
@@ -28,6 +28,9 @@ export function TeamDrawers() {
     isEditDrawerOpen,
     isCreateConfirmModalOpen,
     isEditConfirmModalOpen,
+    isSuccessModalOpen,
+    successMessage,
+    successType,
     editingTeamDrawer,
     pendingCreateData,
     pendingEditData,
@@ -37,6 +40,7 @@ export function TeamDrawers() {
     closeEditDrawer,
     closeCreateConfirmModal,
     closeEditConfirmModal,
+    closeSuccessModal,
     confirmCreateTeam,
     confirmEditTeam,
   } = useTeamsStore();
@@ -87,7 +91,7 @@ export function TeamDrawers() {
       {/* Edit Team Drawer */}
       <Drawer open={isEditDrawerOpen} onOpenChange={closeEditDrawer}>
         <DrawerContent
-          className="h-[96vh] max-w-[600px] ml-auto px-8"
+          className="h-[96vh] max-w-[600px] ml-auto px-8 overflow-y-auto"
           aria-describedby="edit-team-description"
         >
           <DrawerHeader className="text-left">
@@ -132,13 +136,13 @@ export function TeamDrawers() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="w-full">
-            <AlertDialogCancel disabled={loading} className="w-full">
+            <AlertDialogCancel className="w-full" disabled={loading}>
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction
+              className="w-full"
               onClick={handleConfirmCreate}
               disabled={loading}
-              className="w-full"
             >
               {loading ? (
                 <>
@@ -195,6 +199,59 @@ export function TeamDrawers() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Success Modal */}
+      <AlertDialog open={isSuccessModalOpen} onOpenChange={closeSuccessModal}>
+        <AlertDialogContent>
+          <AlertDialogHeader className="flex items-center justify-end">
+            <div className="flex items-center justify-center bg-green-600 w-20 h-20 rounded-full">
+              <Check className="w-15 h-15 text-white" />
+            </div>
+            <AlertDialogTitle className="text-center">
+              {successType === "create" && "Team Created Successfully!"}
+              {successType === "update" && "Team Updated Successfully!"}
+              {successType === "delete" && "Team Deleted Successfully!"}
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-center">
+              {successType === "create" &&
+                `The team "${successMessage}" has been created and added to your organization.`}
+              {successType === "update" &&
+                `The team "${successMessage}" has been updated successfully.`}
+              {successType === "delete" &&
+                `The team "${successMessage}" has been deleted from your organization.`}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={closeSuccessModal} className="w-full">
+              Done
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      {/* <AlertDialog open={isSuccessModalOpen} onOpenChange={closeSuccessModal}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-green-600">
+              {successType === "create" && "Team Created Successfully!"}
+              {successType === "update" && "Team Updated Successfully!"}
+              {successType === "delete" && "Team Deleted Successfully!"}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {successType === "create" &&
+                `The team "${successMessage}" has been created and added to your organization.`}
+              {successType === "update" &&
+                `The team "${successMessage}" has been updated successfully.`}
+              {successType === "delete" &&
+                `The team "${successMessage}" has been deleted from your organization.`}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={closeSuccessModal}>
+              OK
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog> */}
     </>
   );
 }

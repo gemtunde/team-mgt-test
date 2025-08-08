@@ -43,6 +43,11 @@ interface TeamsState {
   pendingCreateData: TeamFormData | null;
   pendingEditData: TeamFormData | null;
 
+  // Success Modal State
+  isSuccessModalOpen: boolean;
+  successMessage: string;
+  successType: "create" | "update" | "delete" | null;
+
   // Actions
   setFilters: (filters: Partial<TeamFilters>) => void;
   setSort: (sort: TeamSort) => void;
@@ -75,6 +80,13 @@ interface TeamsState {
   closeEditConfirmModal: () => void;
   confirmCreateTeam: () => Promise<void>;
   confirmEditTeam: () => Promise<void>;
+
+  // Success Modal Actions
+  openSuccessModal: (
+    type: "create" | "update" | "delete",
+    teamName: string
+  ) => void;
+  closeSuccessModal: () => void;
 
   // Utils
   resetError: () => void;
@@ -121,6 +133,11 @@ export const useTeamsStore = create<TeamsState>((set, get) => ({
   isEditConfirmModalOpen: false,
   pendingCreateData: null,
   pendingEditData: null,
+
+  // Success Modal State
+  isSuccessModalOpen: false,
+  successMessage: "",
+  successType: null,
 
   // Filter Actions
   setFilters: (newFilters) => {
@@ -218,6 +235,9 @@ export const useTeamsStore = create<TeamsState>((set, get) => ({
       // Close both modal and drawer (whichever is open)
       get().closeCreateModal();
       get().closeCreateDrawer();
+
+      // Show success modal
+      get().openSuccessModal("create", newTeam.name);
     } catch (error) {
       set({
         loading: false,
@@ -242,6 +262,8 @@ export const useTeamsStore = create<TeamsState>((set, get) => ({
         throw new Error("Team code already exists");
       }
 
+      const updatedTeam = teams.find((team: Team) => team.id === input.id);
+
       set((state) => ({
         teams: state.teams.map((team) =>
           team.id === input.id
@@ -256,6 +278,11 @@ export const useTeamsStore = create<TeamsState>((set, get) => ({
       // Close both modal and drawer (whichever is open)
       get().closeEditModal();
       get().closeEditDrawer();
+
+      // Show success modal
+      if (updatedTeam) {
+        get().openSuccessModal("update", input.name);
+      }
     } catch (error) {
       set({
         loading: false,
@@ -271,6 +298,9 @@ export const useTeamsStore = create<TeamsState>((set, get) => ({
       // Simulate API delay
       await sleep(500);
 
+      const { deletingTeam } = get();
+      const teamName = deletingTeam?.name || "Team";
+
       set((state) => ({
         teams: state.teams.filter((team) => team.id !== id),
         loading: false,
@@ -278,6 +308,9 @@ export const useTeamsStore = create<TeamsState>((set, get) => ({
 
       get().applyFiltersAndSort();
       get().closeDeleteDialog();
+
+      // Show success modal
+      get().openSuccessModal("delete", teamName);
     } catch (error) {
       set({
         loading: false,
@@ -377,6 +410,21 @@ export const useTeamsStore = create<TeamsState>((set, get) => ({
       get().closeEditConfirmModal();
     }
   },
+
+  // Success Modal Actions
+  openSuccessModal: (type, teamName) =>
+    set({
+      isSuccessModalOpen: true,
+      successType: type,
+      successMessage: teamName,
+    }),
+
+  closeSuccessModal: () =>
+    set({
+      isSuccessModalOpen: false,
+      successType: null,
+      successMessage: "",
+    }),
 
   resetError: () => set({ error: null }),
 }));
