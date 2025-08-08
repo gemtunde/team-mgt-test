@@ -87,7 +87,7 @@ export function TeamDrawers() {
       {/* Edit Team Drawer */}
       <Drawer open={isEditDrawerOpen} onOpenChange={closeEditDrawer}>
         <DrawerContent
-          className="h-[96vh] max-w-[600px] ml-auto px-8 overflow-y-auto"
+          className="h-[96vh] max-w-[600px] ml-auto px-8"
           aria-describedby="edit-team-description"
         >
           <DrawerHeader className="text-left">

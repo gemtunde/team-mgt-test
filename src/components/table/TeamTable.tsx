@@ -126,8 +126,8 @@ export function TeamTable() {
       <hr />
 
       {/* Filters */}
-      <div className="flex items-center justify-between  sm:flex-row gap-4 p-4 rounded-lg">
-        <div className="flex items-center gap-4 justify-between">
+      <div className="flex flex-col md:flex-row items-center justify-between  sm:flex-row gap-4 p-4 rounded-lg">
+        <div className="flex  flex-col md:flex-row items-center gap-4 justify-between">
           <div className="relative w-full">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
@@ -155,7 +155,7 @@ export function TeamTable() {
           </div>
         </div>
 
-        <Button onClick={openCreateDrawer} className="sm:w-auto">
+        <Button onClick={openCreateDrawer} className="sm:w-auto w-full">
           <Plus className="mr-2 h-4 w-4" />
           Create Team
         </Button>
@@ -233,17 +233,12 @@ export function TeamTable() {
                     </td>
 
                     <td className="px-4 py-4 text-sm text-gray-600">
-                      <a
-                        href={`mailto:${team.email}`}
-                        className="text-blue-600 hover:text-blue-800 hover:underline"
-                      >
-                        {team.email}
-                      </a>
+                      <p>{team.email}</p>
                     </td>
                     <td className="px-4 py-4 text-sm text-gray-600">
                       {team.entity}
                     </td>
-                    <td className="flex items-center justify-center gap-2 px-4 py-4 text-sm text-gray-600">
+                    <td className="flex items-center justify-start gap-2 px-4 py-4 text-sm text-gray-600">
                       <Avatar>
                         <AvatarFallback className="bg-[#1659E6] text-white">
                           {getInitialsFromFullName(team.manager)}

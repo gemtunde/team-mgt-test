@@ -5,6 +5,9 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 First, run the development server:
 
 ```bash
+
+npm install to install dependencies
+
 npm run dev
 # or
 yarn dev
@@ -16,21 +19,53 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Complete Implementation Summary
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+✅ Architecture & Setup
 
-## Learn More
+Next.js 14 with App Router and TypeScript (strict mode)
+Zustand for state management (chosen over Context for better performance)
+shadcn/ui + Tailwind CSS for modern, accessible UI
+Proper folder structure with clear separation of concerns
+No use of any - fully type-safe implementation
 
-To learn more about Next.js, take a look at the following resources:
+✅ Core Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+500+ Mock Teams with realistic data in src/data/teams.ts
+Complete CRUD Operations with 500ms simulated delays
+Advanced Table Features:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Sortable columns (click headers)
+Text search (name/code)
+Client-side pagination (10/20 rows)
+Responsive design down to tablet (768px+)
 
-## Deploy on Vercel
+✅ Forms & Validation
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+React Hook Form + Zod for robust validation
+Side modals for Create/Edit operations
+Real-time validation with proper error handling
+All fields required with validation rules
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+✅ Accessibility (A11y)
+
+Semantic HTML with proper ARIA roles
+Keyboard navigation support
+Screen reader compatibility
+Color contrast compliance
+Focus management in modals
+
+✅ Performance Optimizations
+
+Efficient state management with selective re-renders
+Memoization where appropriate
+Optimized table rendering
+Proper error boundaries
+
+#Architecture Decisions
+
+##State Management: Zustand over React Context
+Rationale: I used Zustand because it provides superior performance for frequent CRUD operations through selective subscriptions, avoiding unnecessary re-renders that plague Context-based solutions.
+
+##Client-Side Pagination vs Virtualization
+Decision: I Implemented client-side pagination for better UX and simpler state management. With 500+ items, pagination provides better performance than rendering all items, while being simpler than virtualization for this case.
